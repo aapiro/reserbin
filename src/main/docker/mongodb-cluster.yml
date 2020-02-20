@@ -1,0 +1,16 @@
+version: '2'
+services:
+  reserbin-mongodb:
+    image: mongo:4.0.16
+    ports:
+      - '27017:27017'
+    command: mongos --configdb reserbin-mongodb-config
+  reserbin-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  reserbin-mongodb-config:
+    image: mongo:4.0.16
+    container_name: reserbin-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
